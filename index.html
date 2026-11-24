@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Il Caveau da 1.000 €</title>
+  <style>
+    :root {
+      --bg: #090a0f;
+      --card: #121520;
+      --gold: #f5b942;
+      --gold-2: #ffdf8e;
+      --text: #f4f6fb;
+      --muted: #98a2b3;
+      --danger: #ff4d5a;
+      --ok: #22c55e;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: radial-gradient(circle at top, #1b1f33 0%, var(--bg) 65%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 14px 80px;
+    }
+    .wrap { width: 100%; max-width: 500px; }
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .prize {
+      background: rgba(245, 185, 66, 0.12);
+      border: 1px solid rgba(245, 185, 66, 0.45);
+      color: var(--gold-2);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 1.05rem;
+    }
+    button {
+      cursor: pointer;
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      transition: transform .12s ease, opacity .15s ease;
+    }
+    button:active { transform: scale(0.97); }
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold), #d98c14);
+      color: #111;
+      padding: 12px 18px;
+      font-size: 0.98rem;
+      width: 100%;
+    }
+    .btn-ghost {
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+      padding: 8px 12px;
+      font-size: 0.85rem;
+    }
+    .vault-card {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 22px;
+      padding: 18px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.55);
+      position: relative;
+      overflow: hidden;
+    }
+    .vault-stage {
+      height: 190px;
+      border-radius: 16px;
+      background: linear-gradient(160deg, #1d2234, #0e1018);
+      border: 2px solid rgba(245, 185, 66, 0.25);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      margin-bottom: 16px;
+    }
+    .loot {
+      font-size: 2.1rem;
+      letter-spacing: 6px;
+      filter: drop-shadow(0 6px 14px rgba(0,0,0,0.6));
+      user-select: none;
+    }
+    .dial {
+      margin-top: 10px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.45);
+      border: 1px solid rgba(245,185,66,0.4);
+      font-size: 0.82rem;
+      color: var(--gold-2);
+    }
+    .shake { animation: shake .35s ease; }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      75% { transform: translateX(8px); }
+    }
+    .code-input {
+      width: 100%;
+      text-align: center;
+      font-size: 1.8rem;
+      letter-spacing: 12px;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: #0b0d14;
+      color: var(--gold-2);
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+    .status {
+      min-height: 24px;
+      text-align: center;
+      font-size: 0.92rem;
+      margin-bottom: 12px;
+      color: var(--muted);
+    }
+    .status.err { color: var(--danger); font-weight: 700; }
+    .status.ok { color: var(--ok); font-weight: 800; }
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+    .feed {
+      margin-top: 16px;
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 14px;
+    }
+    .feed-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--gold-2);
+      margin-bottom: 8px;
+    }
+    .feed-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.84rem;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      color: var(--muted);
+    }
+    .feed-item:last-child { border-bottom: none; }
+    .admin-box {
+      margin-top: 16px;
+      background: #0e111a;
+      border: 1px dashed rgba(255,255,255,0.18);
+      border-radius: 14px;
+      padding: 12px;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .admin-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .admin-row input {
+      flex: 1;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: #07080d;
+      color: #fff;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div class="prize">🏆 MONTEPREMI: 1.000 €</div>
+      <button class="btn-ghost" id="soundBtn" type="button">🔊 Audio: ON</button>
+    </div>
+
+    <div class="vault-card" id="card">
+      <div class="vault-stage" id="stage">
+        <div class="loot">💎 💵 🪙 💵 💎</div>
+        <div class="dial" id="dialText">CASSAFORTE SIGILLATA • 4 CIFRE</div>
+      </div>
+
+      <div class="meta">
+        <span>Tentativi disponibili: <strong id="credits">0</strong></span>
+        <span>Costo: <strong>5 €</strong></span>
+      </div>
+
+      <input
+        class="code-input"
+        id="codeInput"
+        type="text"
+        inputmode="numeric"
+        maxlength="4"
+        placeholder="0000"
+      />
+
+      <div class="status" id="status">Sblocca un tentativo per provare il codice.</div>
+
+      <button class="btn-gold" id="buyBtn" type="button" style="margin-bottom: 10px;">
+        💳 Compra 1 Tentativo (5 €) — Demo
+      </button>
+      <button class="btn-gold" id="tryBtn" type="button" style="background: linear-gradient(135deg, #22c55e, #15803d); color: #fff;">
+        🔓 Tenta Apertura Cassaforte
+      </button>
+    </div>
+
+    <div class="feed">
+      <div class="feed-title">⚡ Tentativi recenti (codici oscurati per proteggere il gioco)</div>
+      <div id="feedList"></div>
+    </div>
+
+    <div class="admin-box">
+      <div><strong>Pannello Demo / Admin</strong> — Codice segreto attuale: <span id="secretView" style="color:#ffdf8e;font-weight:800;">1984</span></div>
+      <div class="admin-row">
+        <input id="newSecretInput" type="text" maxlength="4" placeholder="Nuovo codice 4 cifre" />
+        <button class="btn-ghost" id="saveSecretBtn" type="button">Imposta</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let secretCode = "1984";
+    let credits = 0;
+    let soundOn = true;
+    let won = false;
+
+    const history = [
+      { user: "Giocatore #104", code: "••••", res: "❌ Errato" },
+      { user: "Giocatore #103", code: "••••", res: "❌ Errato" },
+      { user: "Giocatore #102", code: "••••", res: "❌ Errato" }
+    ];
+
+    const creditsEl = document.getElementById("credits");
+    const codeInput = document.getElementById("codeInput");
+    const statusEl = document.getElementById("status");
+    const stageEl = document.getElementById("stage");
+    const dialTextEl = document.getElementById("dialText");
+    const feedListEl = document.getElementById("feedList");
+    const secretViewEl = document.getElementById("secretView");
+
+    function beep(freq, dur = 0.14) {
+      if (!soundOn) return;
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "triangle";
+        osc.frequency.value = freq;
+        gain.gain.value = 0.08;
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        setTimeout(() => { osc.stop(); ctx.close(); }, dur * 1000);
+      } catch (e) {}
+    }
+
+    function renderFeed() {
+      feedListEl.innerHTML = history.slice(0, 5).map(item =>
+        `<div class="feed-item"><span>${item.user} (${item.code})</span><span>${item.res}</span></div>`
+      ).join("");
+    }
+
+    function updateUI() {
+      creditsEl.textContent = credits;
+      secretViewEl.textContent = secretCode;
+    }
+
+    document.getElementById("soundBtn").addEventListener("click", (e) => {
+      soundOn = !soundOn;
+      e.target.textContent = soundOn ? "🔊 Audio: ON" : "🔇 Audio: OFF";
+    });
+
+    document.getElementById("buyBtn").addEventListener("click", () => {
+      if (won) return;
+      credits += 1;
+      beep(620, 0.1);
+      statusEl.className = "status";
+      statusEl.textContent = "Tentativo simulato sbloccato! Inserisci 4 cifre.";
+      updateUI();
+    });
+
+    document.getElementById("tryBtn").addEventListener("click", () => {
+      if (won) return;
+      const val = codeInput.value.trim();
+      if (!/^\d{4}$/.test(val)) {
+        statusEl.className = "status err";
+        statusEl.textContent = "Inserisci esattamente 4 numeri.";
+        return;
+      }
+      if (credits <= 0) {
+        statusEl.className = "status err";
+        statusEl.textContent = "Nessun tentativo disponibile. Clicca su 'Compra 1 Tentativo'.";
+        return;
+      }
+
+      credits -= 1;
+      updateUI();
+
+      if (val === secretCode) {
+        won = true;
+        beep(880, 0.35);
+        stageEl.style.borderColor = "#22c55e";
+        dialTextEl.textContent = "CASSAFORTE APERTA! HAI VINTO 1.000 €";
+        statusEl.className = "status ok";
+        statusEl.textContent = "🎉 CODICE ESATTO! Montepremi sbloccato!";
+        history.unshift({ user: "Tu", code: "••••", res: "✅ VINTO!" });
+        renderFeed();
+      } else {
+        beep(190, 0.22);
+        stageEl.classList.remove("shake");
+        void stageEl.offsetWidth;
+        stageEl.classList.add("shake");
+        statusEl.className = "status err";
+        statusEl.textContent = `Codice ${val} errato. Riprova!`;
+        history.unshift({ user: "Tu", code: "••••", res: "❌ Errato" });
+        renderFeed();
+      }
+    });
+
+    document.getElementById("saveSecretBtn").addEventListener("click", () => {
+      const nextCode = document.getElementById("newSecretInput").value.trim();
+      if (/^\d{4}$/.test(nextCode)) {
+        secretCode = nextCode;
+        won = false;
+        stageEl.style.borderColor = "rgba(245, 185, 66, 0.25)";
+        dialTextEl.textContent = "CASSAFORTE SIGILLATA • 4 CIFRE";
+        statusEl.className = "status";
+        statusEl.textContent = "Nuovo codice segreto impostato.";
+        updateUI();
+      }
+    });
+
+    renderFeed();
+    updateUI();
+  </script>
+</body>
+</html>
